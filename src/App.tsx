@@ -1,6 +1,13 @@
 import React from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { AppState, TodoActionTypes, AddTodoAction } from './store';
+import { TodoItem } from "./todo-item";
+import { FASTDesignSystemProvider } from "@microsoft/fast-components";
+
+/* eslint-disable */
+TodoItem;
+FASTDesignSystemProvider;
+/* eslint-enable */
 
 function App() {
   const contentName = "content";
@@ -22,11 +29,13 @@ function App() {
 
   return (
     <div className="App">
-      {Object.values(todos).map(todo => <p id={todo.id} key={todo.id}>{todo.content}</p>)}
+      <fast-design-system-provider use-defaults style={{height: "100%"}}>
+      {Object.values(todos).map(todo => <todo-item id={todo.id} key={todo.id} foo={todo.content}>{todo.content}</todo-item>)}
       <form onSubmit={submitHandler}>
         <label>New Todo<br /><input type="text" name="content" /></label>
         <button type="submit">Add todo</button>
       </form>
+      </fast-design-system-provider>
     </div>
   );
 }
