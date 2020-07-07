@@ -15,3 +15,9 @@ code {
 body, html, #root, .App  {
   height: 100%;
 }
+
+.todo-region {
+  margin: 0 auto;
+  max-width: 600px;
+  padding: 48px 12px;
+}

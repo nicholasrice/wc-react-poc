@@ -4,7 +4,7 @@ import { uniqueId, fromPairs } from "lodash-es";
 /**
  * Defines a todo item in app state
  */
-interface TodoItemState {
+export interface TodoItemState {
     id: string,
     done: boolean,
     content: string
