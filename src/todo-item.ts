@@ -26,5 +26,5 @@ const styles = css`
 })
 export class TodoItem extends FASTElement {
     @attr
-    public foo: string;
+    public foo: string = "";
 }
