@@ -1,12 +1,21 @@
 /** @jsx h */ /* Note: Set the JSX pragma to the wrapped version of createElement */
 import h from "./pragma"; /* Note: Import wrapped createElement. */
 
-import React from 'react';
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { AppState, TodoActionTypes, AddTodoAction, TodoItemState } from './store';
+import {
+  AppState,
+  TodoActionTypes,
+  AddTodoAction,
+  TodoItemState,
+} from "./store";
 import { TodoItem } from "./todo-item";
-import { FASTButton, FASTTextField, FASTDesignSystemProvider } from "@microsoft/fast-components";
-import pretty from 'pretty';
+import {
+  FASTButton,
+  FASTTextField,
+  FASTDesignSystemProvider,
+} from "@microsoft/fast-components";
+import pretty from "pretty";
 import { v4 as uuid } from "uuid";
 
 export const SSR_KEY = uuid();
@@ -19,7 +28,9 @@ FASTTextField;
 /* eslint-enable */
 
 function App(props: { ssr: boolean }) {
-  const todos = useSelector<AppState, AppState["todos"]>(state => state.todos);
+  const todos = useSelector<AppState, AppState["todos"]>(
+    (state) => state.todos
+  );
   const dispatch = useDispatch();
 
   /**
@@ -35,8 +46,14 @@ function App(props: { ssr: boolean }) {
       if (form) {
         const contentInput = form.elements["content" as any];
 
-        if (contentInput instanceof FASTTextField && contentInput.value.length) {
-          dispatch<AddTodoAction>({type: TodoActionTypes.add, payload: { content: contentInput.value }});
+        if (
+          contentInput instanceof FASTTextField &&
+          contentInput.value.length
+        ) {
+          dispatch<AddTodoAction>({
+            type: TodoActionTypes.add,
+            payload: { content: contentInput.value },
+          });
         }
       }
     }
@@ -46,61 +63,75 @@ function App(props: { ssr: boolean }) {
    * Toggle the todo's done state
    */
   function toggleTodo(e: CustomEvent) {
-    dispatch({type: TodoActionTypes.toggle, payload: { id: (e.target as TodoItem).id}})
+    dispatch({
+      type: TodoActionTypes.toggle,
+      payload: { id: (e.target as TodoItem).id },
+    });
   }
 
   /**
    * Removes the todo
    */
   function removeTodo(e: CustomEvent) {
-    dispatch({type: TodoActionTypes.remove, payload: { id: (e.target as TodoItem).id}})
+    dispatch({
+      type: TodoActionTypes.remove,
+      payload: { id: (e.target as TodoItem).id },
+    });
   }
 
-  const sortedTodos: { completed: TodoItemState[], incomplete: TodoItemState[]} = Object.values(todos).reduce((prev, current) => {
-    current.done ? prev.completed.push(current) : prev.incomplete.push(current);
+  const sortedTodos: {
+    completed: TodoItemState[];
+    incomplete: TodoItemState[];
+  } = Object.values(todos).reduce(
+    (prev, current) => {
+      current.done
+        ? prev.completed.push(current)
+        : prev.incomplete.push(current);
 
-    return prev;
-  }, { completed: [] as TodoItemState[], incomplete: [] as TodoItemState[]})
+      return prev;
+    },
+    { completed: [] as TodoItemState[], incomplete: [] as TodoItemState[] }
+  );
 
   return (
     <div className="App">
-      <FASTDesignSystemProvider use-defaults style={{height: "100%"}}>
+      <FASTDesignSystemProvider use-defaults style={{ height: "100%" }}>
         <div className="todo-region">
-        <form style={{display: "flex"}}>
+          <form style={{ display: "flex" }}>
             <FASTTextField name="content"></FASTTextField>
             <FASTButton
               appearance="accent"
               type="submit"
-              style={{marginInlineStart: "4px"}}
-              onClick={submitHandler} /* Note: React click handler on custom element */
+              style={{ marginInlineStart: "4px" }}
+              onClick={
+                submitHandler
+              } /* Note: React click handler on custom element */
             >
               Add todo
             </FASTButton>
           </form>
-          {sortedTodos.incomplete.map(todo =>
+          {sortedTodos.incomplete.map((todo) => (
             <TodoItem
               id={todo.id}
               key={todo.id}
               content={todo.content}
               completed={todo.done}
-              events={{completed: toggleTodo, removed: removeTodo}} />
-          )}
-          {sortedTodos.completed.map(todo =>
+              events={{ completed: toggleTodo, removed: removeTodo }}
+            />
+          ))}
+          {sortedTodos.completed.map((todo) => (
             <TodoItem
               id={todo.id}
               key={todo.id}
               content={todo.content}
               completed={todo.done}
-              events={{completed: toggleTodo, removed: removeTodo}} />
-          )}
-
+              events={{ completed: toggleTodo, removed: removeTodo }}
+            />
+          ))}
         </div>
-        { props.ssr ? (
-          <pre>
-          {pretty(window.localStorage.getItem(SSR_KEY))}
-        </pre>
+        {props.ssr ? (
+          <pre>{pretty(window.localStorage.getItem(SSR_KEY))}</pre>
         ) : null}
-        
       </FASTDesignSystemProvider>
     </div>
   );
