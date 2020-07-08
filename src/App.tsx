@@ -5,7 +5,11 @@ import React from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { AppState, TodoActionTypes, AddTodoAction } from './store';
 import { TodoItem } from "./todo-item";
-import { FASTDesignSystemProvider, FASTButton, FASTTextField } from "@microsoft/fast-components";
+import { FASTButton, FASTTextField, FASTDesignSystemProvider } from "@microsoft/fast-components";
+import pretty from 'pretty';
+import { v4 as uuid } from "uuid";
+
+export const SSR_KEY = uuid();
 
 /* eslint-disable */
 TodoItem;
@@ -14,8 +18,7 @@ FASTButton;
 FASTTextField;
 /* eslint-enable */
 
-function App() {
-  const contentName = "content";
+function App(props: { ssr: boolean }) {
   const todos = useSelector<AppState, AppState["todos"]>(state => state.todos);
   const dispatch = useDispatch();
 
@@ -55,29 +58,36 @@ function App() {
 
   return (
     <div className="App">
-      <fast-design-system-provider use-defaults style={{height: "100%"}}>
+      <FASTDesignSystemProvider use-defaults style={{height: "100%"}}>
         <div className="todo-region">
         <form style={{display: "flex"}}>
-            <fast-text-field name="content"></fast-text-field>
-            <fast-button
+            <FASTTextField name="content"></FASTTextField>
+            <FASTButton
+              appearance="accent"
               type="submit"
               style={{marginInlineStart: "4px"}}
               onClick={submitHandler} /* Note: React click handler on custom element */
             >
               Add todo
-            </fast-button>
+            </FASTButton>
           </form>
 
           {Object.values(todos).map(todo =>
-            <todo-item
+            <TodoItem
               id={todo.id}
               key={todo.id}
               content={todo.content}
               completed={todo.done}
-              events={{completed: toggleTodo, removed: removeTodo}}></todo-item>
+              events={{completed: toggleTodo, removed: removeTodo}} />
           )}
         </div>
-      </fast-design-system-provider>
+        { props.ssr ? (
+          <pre>
+          {pretty(window.localStorage.getItem(SSR_KEY))}
+        </pre>
+        ) : null}
+        
+      </FASTDesignSystemProvider>
     </div>
   );
 }

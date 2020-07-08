@@ -1,6 +1,7 @@
 import { customElement, FASTElement, attr, html, css } from "@microsoft/fast-element";
 import { display } from "@microsoft/fast-foundation";
 import { FASTCheckbox, FASTButton, neutralOutlineRestBehavior } from "@microsoft/fast-components";
+import { TodoAction } from './store';
 
 /* eslint-disable */
 FASTCheckbox;
@@ -69,3 +70,16 @@ export class TodoItem extends FASTElement {
         this.$emit("removed")
     }
 }
+
+/**
+ * Note: The TodoItem needs to be declared as a React Component
+ * to be used in JSX as <TodoItem />
+ */
+export interface TodoItem extends React.Component<{
+    content: string;
+    completed: boolean;
+    events?: {
+        completed?: (e: CustomEvent) => void;
+        removed?: (e: CustomEvent) => void;
+    }
+} & React.HTMLAttributes<TodoItem>> {}

@@ -18,6 +18,17 @@ body, html, #root, .App  {
 
 .todo-region {
   margin: 0 auto;
-  max-width: 600px;
+  width: 600px;
   padding: 48px 12px;
+  overflow: auto;
+}
+
+fast-design-system-provider {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+fast-design-system-provider pre {
+  padding: 8px;
 }
