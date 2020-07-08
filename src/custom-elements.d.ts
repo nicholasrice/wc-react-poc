@@ -31,6 +31,9 @@ declare namespace JSX {
     }
 }
 
+/**
+ * Satisfy TypeScript  importing modules without typings
+ */
 declare module '@skatejs/val';
 declare module 'pretty';
 declare module 'uuid';
