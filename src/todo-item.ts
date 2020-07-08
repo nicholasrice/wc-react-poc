@@ -1,7 +1,6 @@
 import { customElement, FASTElement, attr, html, css } from "@microsoft/fast-element";
 import { display } from "@microsoft/fast-foundation";
 import { FASTCheckbox, FASTButton, neutralOutlineRestBehavior } from "@microsoft/fast-components";
-import { TodoAction } from './store';
 
 /* eslint-disable */
 FASTCheckbox;
