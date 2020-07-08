@@ -50,7 +50,7 @@ function App(props: { ssr: boolean }) {
   }
 
   /**
-   * Toggle the todo's done state
+   * Removes the todo
    */
   function removeTodo(e: CustomEvent) {
     dispatch({type: TodoActionTypes.remove, payload: { id: (e.target as TodoItem).id}})
