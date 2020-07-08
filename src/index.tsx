@@ -14,12 +14,10 @@ document.body.appendChild(root);
 function SetSSR() {
   const foo = useSelector(state => state);
 
-  console.log("ssr set")
   window.localStorage.setItem(SSR_KEY, ReactDOMServer.renderToString(
     <Provider store={store}><App ssr={false} /></Provider>
   ));
 
-  console.log(window.localStorage.getItem(SSR_KEY));
   return null;
 }
 
