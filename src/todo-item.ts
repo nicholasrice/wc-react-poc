@@ -39,6 +39,10 @@ const styles = css`
     fast-button {
         margin-inline-start: calc(var(--design-unit) * 2px);
     }
+    
+    :host([completed]) {
+        opacity: .5;
+    }
 `.withBehaviors(neutralOutlineRestBehavior)
 
 @customElement({
@@ -77,7 +81,7 @@ export class TodoItem extends FASTElement {
  */
 export interface TodoItem extends React.Component<{
     content: string;
-    completed: boolean;
+    completed?: boolean;
     events?: {
         completed?: (e: CustomEvent) => void;
         removed?: (e: CustomEvent) => void;

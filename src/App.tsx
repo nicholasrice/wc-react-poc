@@ -3,7 +3,7 @@ import h from "./pragma"; /* Note: Import wrapped createElement. */
 
 import React from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { AppState, TodoActionTypes, AddTodoAction } from './store';
+import { AppState, TodoActionTypes, AddTodoAction, TodoItemState } from './store';
 import { TodoItem } from "./todo-item";
 import { FASTButton, FASTTextField, FASTDesignSystemProvider } from "@microsoft/fast-components";
 import pretty from 'pretty';
@@ -56,6 +56,12 @@ function App(props: { ssr: boolean }) {
     dispatch({type: TodoActionTypes.remove, payload: { id: (e.target as TodoItem).id}})
   }
 
+  const sortedTodos: { completed: TodoItemState[], incomplete: TodoItemState[]} = Object.values(todos).reduce((prev, current) => {
+    current.done ? prev.completed.push(current) : prev.incomplete.push(current);
+
+    return prev;
+  }, { completed: [] as TodoItemState[], incomplete: [] as TodoItemState[]})
+
   return (
     <div className="App">
       <FASTDesignSystemProvider use-defaults style={{height: "100%"}}>
@@ -71,8 +77,7 @@ function App(props: { ssr: boolean }) {
               Add todo
             </FASTButton>
           </form>
-
-          {Object.values(todos).map(todo =>
+          {sortedTodos.incomplete.map(todo =>
             <TodoItem
               id={todo.id}
               key={todo.id}
@@ -80,6 +85,15 @@ function App(props: { ssr: boolean }) {
               completed={todo.done}
               events={{completed: toggleTodo, removed: removeTodo}} />
           )}
+          {sortedTodos.completed.map(todo =>
+            <TodoItem
+              id={todo.id}
+              key={todo.id}
+              content={todo.content}
+              completed={todo.done}
+              events={{completed: toggleTodo, removed: removeTodo}} />
+          )}
+
         </div>
         { props.ssr ? (
           <pre>
